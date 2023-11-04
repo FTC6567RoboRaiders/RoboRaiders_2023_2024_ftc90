@@ -1,12 +1,13 @@
 package RoboRaiders.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.openftc.easyopencv.OpenCvCamera;
 
 @Autonomous(name = "LRAuto")
 
-public class LRAuto {
+public class LRAuto extends LinearOpMode {
     OpenCvCamera camera;
     int cameraMonitorViewId;
     GripPipelineBlue gripPipelineBlue;
