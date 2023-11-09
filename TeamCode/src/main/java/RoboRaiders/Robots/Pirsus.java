@@ -188,6 +188,8 @@ public class Pirsus {
 
     }
 
+
+
     /**
      * calculates the number of encoder counts to travel a given distance for the drive train motors
      * @param distance
@@ -310,6 +312,7 @@ public class Pirsus {
         rRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
 
     /**
      * These methods will get individual encoder position from any of the drive train motors

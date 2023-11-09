@@ -47,7 +47,7 @@ public class BasicTeleop extends OpMode {
         // deposit
         boolean yButton = gamepad2.y;
         boolean xButton = gamepad2.x;
-        double rStickY = gamepad2.right_stick_y;
+        double rStikcY = gamepad2.right_stick_y;
 
         // lift
         boolean rBumper = gamepad2.right_bumper;
