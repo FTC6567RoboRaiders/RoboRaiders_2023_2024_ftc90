@@ -2,11 +2,13 @@ package RoboRaiders.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import RoboRaiders.Robots.Pirsus;
 import RoboRaiders.Utilities.Logger.Logger;
+
 
 // This line establishes this op mode as a teleop op mode and allows for it to be displayed
 // in the drop down list on the Driver Station phone to be chosen to run.
@@ -20,7 +22,33 @@ public class BasicTeleop extends OpMode {
     public Logger myLogger =  new Logger("TestBotTeleop");
     public Logger dtLogger = new Logger("DT");   // Drive train logger
 
+    // triggers for driver to adjust speed
+    public double lTriggerD;
+    public double rTriggerD;
 
+    // drone launch buttons
+    public boolean lBumper;
+    public boolean bButton;
+
+    // intake triggers for gunner
+    public double rTriggerG;
+    public double lTriggerG;
+
+    // deposit
+    public boolean yButton;
+    public boolean xButton;
+    public double rStickY;
+    public double rStickX;
+
+    // lift
+    public double leftStickY;
+
+    //Timer
+    public ElapsedTime droneTimer;
+    public boolean endGame = false;  //This checks whether we have elapsed enough time to be in endgame
+
+    public int armMotorEncoder;
+    public int targetArmMotorEncoder;
 
     @Override
     public void init() {
@@ -31,9 +59,44 @@ public class BasicTeleop extends OpMode {
         telemetry.update();
     }
 
+    @Override
+    public void start() {
+
+        //Timer for drone launch safety
+        droneTimer = new ElapsedTime();
+        droneTimer.reset();
+
+    }
+
+
 
     @Override
     public void loop() {
+
+        lTriggerD = gamepad1.left_trigger;
+        rTriggerD = gamepad1.right_trigger;
+
+        // drone launch buttons
+        lBumper = gamepad2.left_bumper;
+        bButton = gamepad2.b;
+
+        // intake
+        rTriggerG = gamepad2.right_trigger;
+        lTriggerG = gamepad2.left_trigger;
+
+        // deposit
+        yButton = gamepad2.y;
+        xButton = gamepad2.x;
+        rStickY = gamepad2.right_stick_y;
+        rStickX = gamepad2.right_stick_x;
+
+
+        // lift
+        leftStickY = gamepad2.left_stick_y;
+
+        //Get Encoders for arm motor to track stopping
+        armMotorEncoder = robot.getArmEncoders();
+        targetArmMotorEncoder = 100;
 
 
 
@@ -53,6 +116,10 @@ public class BasicTeleop extends OpMode {
         telemetry.addData("| Gamepad2 left bumper:   ", "fire drone               |");
         telemetry.addData("+-------------------------", "-------------------------+");
 
+
+        if(droneTimer.seconds() >= 90.0){
+            endGame = true;
+        }
     }
 
 
@@ -77,24 +144,6 @@ public class BasicTeleop extends OpMode {
         double backLeftPower = (rotY - rotX + rx) / denominator;
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
-        double lTriggerD = gamepad1.left_trigger;
-        double rTriggerD = gamepad1.right_trigger;
-
-        // drone launch buttons
-        boolean lBumper = gamepad2.left_bumper;
-        boolean bButton = gamepad2.b;
-
-        // intake
-        double rTriggerG = gamepad2.right_trigger;
-        double lTriggerG = gamepad2.left_trigger;
-
-        // deposit
-        boolean yButton = gamepad2.y;
-        boolean xButton = gamepad2.x;
-        double rStickY = gamepad2.right_stick_y;
-
-        // lift
-        boolean rBumper = gamepad2.right_bumper;
 
 
 //        telemetry.addLine("Variables");
@@ -124,13 +173,6 @@ public class BasicTeleop extends OpMode {
             backLeftPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
             backRightPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
         }
-        if(rTriggerG > 0.0) {
-            robot.setIntakeMotorPower(rTriggerG);
-        }
-
-        else if(lTriggerG > 0.0) {
-            robot.setIntakeMotorPower(-lTriggerG);
-        }
 
 
 
@@ -143,5 +185,62 @@ public class BasicTeleop extends OpMode {
         );
         //               dtLogger);
     }
+
+
+    public void doIntake() {
+
+        if(rTriggerG > 0.0) {
+            robot.setIntakeMotorPower(rTriggerG);
+        }
+
+        else if(lTriggerG > 0.0) {
+            robot.setIntakeMotorPower(-lTriggerG);
+        }
+
+    }
+
+    public void doDroneLaunch() {
+        if (endGame && bButton && lBumper) {
+            robot.fireDroneTrigger(1.0);
+        }
+
+        else {
+            robot.fireDroneTrigger(0.0);
+        }
+
+    }
+
+    public void doDeposit() {
+        if(armMotorEncoder >= targetArmMotorEncoder){
+            robot.armMotor.setPower(0.0);
+
+        }
+        else {
+            robot.armMotor.setPower(0.5 * rStickX);
+        }
+
+        if(xButton) {
+            robot.adjustBucketPosition(1.0);
+            robot.resetArmMotorEncoders();
+        }
+        else if(yButton) {
+            robot.adjustBucketPosition(0.5);
+        }
+    }
+
+    public void doLiftRobot() {
+        if(leftStickY > 0.0){
+            robot.liftUp();
+        }
+        else if(leftStickY < 0.0){
+            robot.liftDown();
+        }
+
+        else {
+            robot.liftStop();
+        }
+    }
+
+
 
 }

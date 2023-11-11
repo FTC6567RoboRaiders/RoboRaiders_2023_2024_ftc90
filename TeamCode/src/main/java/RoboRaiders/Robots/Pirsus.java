@@ -28,6 +28,8 @@ public class Pirsus {
 
     public Servo launchTrigger = null;
 
+    public Servo liftServo = null;
+
     public DcMotorEx armMotor = null;
     public Servo bucketPositioner = null;
     public Servo entrapmentServo1 = null;
@@ -85,6 +87,9 @@ public class Pirsus {
         bucketPositioner = hwMap.get(Servo.class, "bucketPositioner");
         entrapmentServo1 = hwMap.get(Servo.class, "entrapmentServo1");
         entrapmentServo2 = hwMap.get(Servo.class, "entrapmentServo2");
+
+        // lift servo
+        liftServo = hwMap.get(Servo.class, "liftServo");
 
 
         // defines the directions the motors will spin
@@ -199,12 +204,9 @@ public class Pirsus {
 
     }
 
-    public void setIntakeMotorPower(double intakePower) {
 
-        lIntakeMotor.setPower(intakePower);
-        rIntakeMotor.setPower(intakePower);
 
-    }
+
 
 
     /**
@@ -290,6 +292,8 @@ public class Pirsus {
         rFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
 
     }
 
@@ -405,4 +409,50 @@ public class Pirsus {
     // END IMU METHODS
     //
     //**********************************************************************************************
+
+    //**********************************************************************************************
+    //
+    // GUNNER METHODS
+    //
+    //**********************************************************************************************
+
+    public void runArmWithEncoders() {
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void setIntakeMotorPower(double intakePower) {
+
+        lIntakeMotor.setPower(intakePower);
+        rIntakeMotor.setPower(intakePower);
+
+    }
+
+    public void fireDroneTrigger(double servoPosition) {
+        launchTrigger.setPosition(servoPosition);
+    }
+
+    public int getArmEncoders() {
+        return armMotor.getCurrentPosition();
+    }
+
+    public void resetArmMotorEncoders() {
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void adjustBucketPosition(double bucketPosition) {
+        bucketPositioner.setPosition(bucketPosition);
+    }
+
+    public void liftUp() {
+        liftServo.setPosition(1.0);
+    }
+
+    public void liftDown() {
+        liftServo.setPosition(0.0);
+    }
+
+    public void liftStop() {
+        liftServo.setPosition(0.5);
+    }
+
 }
