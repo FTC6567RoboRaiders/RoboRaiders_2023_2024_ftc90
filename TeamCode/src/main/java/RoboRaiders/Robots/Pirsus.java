@@ -28,6 +28,11 @@ public class Pirsus {
 
     public Servo launchTrigger = null;
 
+    public DcMotorEx armMotor = null;
+    public Servo bucketPositioner = null;
+    public Servo entrapmentServo1 = null;
+    public Servo entrapmentServo2 = null;
+
     public BNO055IMU imu;
 
     /* Local OpMode Members */
@@ -68,12 +73,18 @@ public class Pirsus {
         lRMotor = hwMap.get(DcMotorEx.class, "lRMotor");
         rRMotor = hwMap.get(DcMotorEx.class, "rRMotor");
 
-        // intake motors:
+        // intake motors
         rIntakeMotor = hwMap.get(DcMotorEx.class, "rIntakeMotor");
         lIntakeMotor = hwMap.get(DcMotorEx.class, "lIntakeMotor");
 
         // drone launch catch
         launchTrigger = hwMap.get(Servo.class, "launchTrigger");
+
+        // intake motor and servos
+        armMotor = hwMap.get(DcMotorEx.class, "armMotor");
+        bucketPositioner = hwMap.get(Servo.class, "bucketPositioner");
+        entrapmentServo1 = hwMap.get(Servo.class, "entrapmentServo1");
+        entrapmentServo2 = hwMap.get(Servo.class, "entrapmentServo2");
 
 
         // defines the directions the motors will spin
@@ -188,6 +199,12 @@ public class Pirsus {
 
     }
 
+    public void setIntakeMotorPower(double intakePower) {
+
+        lIntakeMotor.setPower(intakePower);
+        rIntakeMotor.setPower(intakePower);
+
+    }
 
 
     /**

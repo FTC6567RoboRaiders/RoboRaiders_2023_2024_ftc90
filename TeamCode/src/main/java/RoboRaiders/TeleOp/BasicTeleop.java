@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import RoboRaiders.Robots.Pirsus;
-import RoboRaiders.Robots.Pirsus;
 import RoboRaiders.Utilities.Logger.Logger;
 
 // This line establishes this op mode as a teleop op mode and allows for it to be displayed
@@ -36,21 +35,6 @@ public class BasicTeleop extends OpMode {
     @Override
     public void loop() {
 
-        // drone launch buttons
-        boolean lBumper = gamepad2.left_bumper;
-        boolean bButton = gamepad2.b;
-
-        // intake
-        double rTrigger = gamepad2.right_trigger;
-        double lTrigger = gamepad2.left_trigger;
-
-        // deposit
-        boolean yButton = gamepad2.y;
-        boolean xButton = gamepad2.x;
-        double rStickY = gamepad2.right_stick_y;
-
-        // lift
-        boolean rBumper = gamepad2.right_bumper;
 
 
         /**
@@ -93,8 +77,25 @@ public class BasicTeleop extends OpMode {
         double backLeftPower = (rotY - rotX + rx) / denominator;
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
-        double lTrigger = gamepad1.left_trigger;
-        double rTrigger = gamepad1.right_trigger;
+        double lTriggerD = gamepad1.left_trigger;
+        double rTriggerD = gamepad1.right_trigger;
+
+        // drone launch buttons
+        boolean lBumper = gamepad2.left_bumper;
+        boolean bButton = gamepad2.b;
+
+        // intake
+        double rTriggerG = gamepad2.right_trigger;
+        double lTriggerG = gamepad2.left_trigger;
+
+        // deposit
+        boolean yButton = gamepad2.y;
+        boolean xButton = gamepad2.x;
+        double rStickY = gamepad2.right_stick_y;
+
+        // lift
+        boolean rBumper = gamepad2.right_bumper;
+
 
 //        telemetry.addLine("Variables");
 //        telemetry.addData("botHeading", String.valueOf(botHeading));
@@ -111,17 +112,24 @@ public class BasicTeleop extends OpMode {
 //        telemetry.addData("auto heading: ", RoboRaidersProperties.getHeading());
 
         // speed changer
-        if(lTrigger > 0.0) {
-            frontLeftPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
-            frontRightPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
-            backLeftPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
-            backRightPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
+        if(lTriggerD > 0.0) {
+            frontLeftPower = (frontLeftPower*0.65) - (0.2 * lTriggerD);
+            frontRightPower = (frontLeftPower*0.65) - (0.2 * lTriggerD);
+            backLeftPower = (frontLeftPower*0.65) - (0.2 * lTriggerD);
+            backRightPower = (frontLeftPower*0.65) - (0.2 * lTriggerD);
         }
-        else if(rTrigger > 0.0) {
-            frontLeftPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
-            frontRightPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
-            backLeftPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
-            backRightPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
+        else if(rTriggerD > 0.0) {
+            frontLeftPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
+            frontRightPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
+            backLeftPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
+            backRightPower = (frontLeftPower*0.65) + (0.2 * lTriggerD);
+        }
+        if(rTriggerG > 0.0) {
+            robot.setIntakeMotorPower(rTriggerG);
+        }
+
+        else if(lTriggerG > 0.0) {
+            robot.setIntakeMotorPower(-lTriggerG);
         }
 
 
@@ -131,7 +139,9 @@ public class BasicTeleop extends OpMode {
                 frontLeftPower*0.45,
                 frontRightPower*0.45,
                 backLeftPower*0.45,
-                backRightPower*0.45);
+                backRightPower*0.45
+        );
         //               dtLogger);
     }
+
 }
