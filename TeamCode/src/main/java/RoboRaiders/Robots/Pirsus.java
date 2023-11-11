@@ -59,24 +59,24 @@ public class Pirsus {
      */
     public void initialize(HardwareMap ahwMap) {
 
-        // Save reference to hardware map
+        // save reference to hardware map
         hwMap = ahwMap;
 
-        // Define and initialize motors
+        // define and initialize motors
         lFMotor = hwMap.get(DcMotorEx.class, "lFMotor");
         rFMotor = hwMap.get(DcMotorEx.class, "rFMotor");
         lRMotor = hwMap.get(DcMotorEx.class, "lRMotor");
         rRMotor = hwMap.get(DcMotorEx.class, "rRMotor");
 
-        //Intake Motors:
-
+        // intake motors:
         rIntakeMotor = hwMap.get(DcMotorEx.class, "rIntakeMotor");
         lIntakeMotor = hwMap.get(DcMotorEx.class, "lIntakeMotor");
 
+        // drone launch catch
         launchTrigger = hwMap.get(Servo.class, "launchTrigger");
 
 
-        // Defines the directions the motors will spin
+        // defines the directions the motors will spin
         lFMotor.setDirection(DcMotor.Direction.REVERSE);
         rFMotor.setDirection(DcMotor.Direction.FORWARD);
         lRMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -326,176 +326,6 @@ public class Pirsus {
     // turret motor methods
 
     /**
-     * calculates the number of encoder counts to travel a given distance for the turret
-     * @param distance
-     * @return
-     */
-    public double turretCalculateCounts(double distance) {
-
-        double COUNTS;
-
-        double DIAMETER = 3.5; // diameter of turret
-        double GEAR_RATIO = (3.0 / 4.0); // gear ratio
-
-        double PULSES = 288.0; // encoder counts in one revolution - core hex motor
-
-        double CIRCUMFERENCE = Math.PI * DIAMETER; //gives circumference
-        double ROTATIONS = (distance / CIRCUMFERENCE) * GEAR_RATIO; //gives rotations
-        COUNTS = PULSES * ROTATIONS; //gives counts
-
-        return COUNTS;
-
-    }
-
-    /**
-     * Sets the target encoder value for the drive train motors
-     * @param encoderPosition
-     */
-//    public void setTurretMotorTargetPosition(double encoderPosition) {
-////
-////        turretMotor.setTargetPosition((int)encoderPosition);
-//
-//    }
-
-    /**
-     * This method will set the mode of all of the drive train motors to run using encoder
-     */
-//    public void turretRunWithEncoders() {
-//
-//        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//    }
-
-    /**
-     * This method will set the mode all of the drive train motors to RUN_TO_POSITION
-     */
-//    public void turretRunWithEncodersSTP() {
-//
-//        turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//    }
-
-    /**
-     * This method will set the mode of all of the drive train motors to run without encoder
-     */
-//    public void turretRunWithoutEncoders() {
-//
-//        turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
-//    }
-
-    /**
-     * This will set the mode of the drive train motors to STOP_AND_RESET_ENCODER, which will zero
-     * the encoder count but also set the motors into a RUN_WITHOUT_ENCODER mode
-     */
-//    public void turretResetEncoders() {
-//
-//        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//    }
-
-//    public void turretSetMotorTargetPosition(int encoderPosition) {
-//
-//        turretMotor.setTargetPosition(encoderPosition);
-//
-//    }
-//    public void setTurretMotorPower(double turretMotorPower) {
-//
-//        turretMotor.setPower(turretMotorPower);
-//
-//    }
-//    public void setTurretMotorVelocity(double ticsPerSecond) {
-//
-//        turretMotor.setVelocity(ticsPerSecond);
-//
-//    }
-
-    /**
-     * These methods will get individual encoder position from any of the drive train motors
-     * @return the encoder position
-     */
-//    public double getTurretEncoderCounts() {
-//
-//        return turretMotor.getCurrentPosition();
-//
-//    }
-//
-//    public void liftResetEncoders() {
-//
-//        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//    }
-//
-//    public void setLiftPower(double liftPower) {
-//
-//        liftMotor.setPower(liftPower);
-//
-//    }
-//    public void setLiftMotorTargetPosition(double liftPosition){
-//        liftMotor.setTargetPosition((int)liftPosition);
-//    }
-//    public void setLiftMotorVelocity(double liftVelocity){
-//        liftMotor.setVelocity(liftVelocity);
-//
-//    }
-//
-//    public double getLiftEncoderCounts(){
-//        return liftMotor.getCurrentPosition();
-//    }
-//    public void liftRunWithEncodersSTP(){
-//        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//    }
-//    public void liftRunWithEncoders(){
-//        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//    }
-//    public void liftRunWithoutEncoders(){
-//        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//    }
-//    public void setLiftMotorPower(double liftPower){
-//        liftMotor.setPower(liftPower);
-//    }
-//    public double getLiftMotorPower() { return liftMotor.getPower(); }
-
-    //**********************************************************************************************
-    //
-    // END DRIVE TRAIN METHODS
-    //
-    //**********************************************************************************************
-
-    //**********************************************************************************************
-    //
-    // Servo METHODS
-    //
-    //**********************************************************************************************
-
-    /**
-     * this sets the servo position for our intake
-     *
-     * @param servoPosition - servo position
-     *                      - 0.5 center position
-     *                      - 0.0 intake position
-     *                      - 1.0 scoring position
-     *
-     */
-//    public void setinTakeServoPosition(double servoPosition){
-//        inTake.setPosition(servoPosition);
-//    }
-
-
-    //**********************************************************************************************
-    //
-    // End Servo METHODS
-    //
-    //**********************************************************************************************
-
-    //**********************************************************************************************
-    //
-    // IMU METHODS
-    //
-    //**********************************************************************************************
-
-
-    /**
      * Gets the current heading from the IMU
      * @return current heading in degrees
      */
@@ -510,12 +340,8 @@ public class Pirsus {
         return heading;
     }
 
-
-
-
-
     /**
-     * Re-initializes the IMU
+     * re-initializes the IMU
      */
     public void resetIMU() {
 
@@ -523,7 +349,7 @@ public class Pirsus {
     }
 
     /**
-     * Calculates and returns an integrate Z-Axis (aka heading).  This handles when the heading crosses
+     * calculates and returns an integrate Z-Axis (aka heading), this handles when the heading crosses
      * 180 or -180
      * @return integrated Z-Axis
      */

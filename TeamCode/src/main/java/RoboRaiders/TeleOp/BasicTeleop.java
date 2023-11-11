@@ -11,12 +11,12 @@ import RoboRaiders.Utilities.Logger.Logger;
 
 // This line establishes this op mode as a teleop op mode and allows for it to be displayed
 // in the drop down list on the Driver Station phone to be chosen to run.
-@TeleOp (name="Basic Teleop - No Automation", group="Test Teleops")
+@TeleOp (name = "Basic Teleop")
 
 public class BasicTeleop extends OpMode {
 
 
-    // Create an instance of the TestRobot and store it into StevesRobot
+    // Create an instance of the robot and store it in Pirsus
     public Pirsus robot = new Pirsus();
     public Logger myLogger =  new Logger("TestBotTeleop");
     public Logger dtLogger = new Logger("DT");   // Drive train logger
@@ -26,7 +26,7 @@ public class BasicTeleop extends OpMode {
     @Override
     public void init() {
 
-        // Initialize stevesRobot and tell user that the robot is initialized
+        // initialise robot and tell user that the robot is initialized
         robot.initialize(hardwareMap);
         telemetry.addData("Robot Initialized waiting your command", true);
         telemetry.update();
@@ -47,7 +47,7 @@ public class BasicTeleop extends OpMode {
         // deposit
         boolean yButton = gamepad2.y;
         boolean xButton = gamepad2.x;
-        double rStikcY = gamepad2.right_stick_y;
+        double rStickY = gamepad2.right_stick_y;
 
         // lift
         boolean rBumper = gamepad2.right_bumper;
@@ -58,16 +58,16 @@ public class BasicTeleop extends OpMode {
          */
 
         telemetry.addData("        Gamepad2 controls ", "as follows:");
-        telemetry.addData("+-------------------------", "--------------------------------+");
-        telemetry.addData("| Gamepad2 right stick X: ", "lift deposit                    |");
-        telemetry.addData("| Gamepad2 Y button:      ", "deposit pixels                  |");
-        telemetry.addData("| Gamepad2 X button:      ", "flip deposit                    |");
-        telemetry.addData("| Gamepad2 right trigger: ", "intake in                       |");
-        telemetry.addData("| Gamepad2 left trigger:  ", "intake out                      |");
-        telemetry.addData("| Gamepad2 right bumper:  ", "lift robot (hold)               |");
-        telemetry.addData("| Gamepad2 B button:      ", "drone safety off                |");
-        telemetry.addData("| Gamepad2 left bumper:   ", "fire drone                      |");
-        telemetry.addData("+-------------------------", "--------------------------------+");
+        telemetry.addData("+-------------------------", "-------------------------+");
+        telemetry.addData("| Gamepad2 right stick X: ", "lift deposit             |");
+        telemetry.addData("| Gamepad2 Y button:      ", "deposit pixels           |");
+        telemetry.addData("| Gamepad2 X button:      ", "flip deposit             |");
+        telemetry.addData("| Gamepad2 right trigger: ", "intake in                |");
+        telemetry.addData("| Gamepad2 left trigger:  ", "intake out               |");
+        telemetry.addData("| Gamepad2 right bumper:  ", "lift robot (hold)        |");
+        telemetry.addData("| Gamepad2 B button:      ", "drone safety off         |");
+        telemetry.addData("| Gamepad2 left bumper:   ", "fire drone               |");
+        telemetry.addData("+-------------------------", "-------------------------+");
 
     }
 
@@ -85,8 +85,8 @@ public class BasicTeleop extends OpMode {
         double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
         double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio, but only when
+        // denominator is the largest motor power (absolute value) or 1
+        // this ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double frontLeftPower = (rotY + rotX + rx) / denominator;
@@ -110,13 +110,14 @@ public class BasicTeleop extends OpMode {
 //        telemetry.addData("backRightPower", String.valueOf(backRightPower));
 //        telemetry.addData("auto heading: ", RoboRaidersProperties.getHeading());
 
-        if(lTrigger > 0.0){
+        // speed changer
+        if(lTrigger > 0.0) {
             frontLeftPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
             frontRightPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
             backLeftPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
             backRightPower = (frontLeftPower*0.65) - (0.2 * lTrigger);
         }
-        else if(rTrigger > 0.0){
+        else if(rTrigger > 0.0) {
             frontLeftPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
             frontRightPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
             backLeftPower = (frontLeftPower*0.65) + (0.2 * lTrigger);
