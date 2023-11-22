@@ -120,6 +120,24 @@ public class BasicTeleop extends OpMode {
         if(droneTimer.seconds() >= 90.0){
             endGame = true;
         }
+
+        // The following lines of code added by Steeeve
+        // Handle the game pad inputs
+        // -----------------------------------------------------------------------------------------
+        // doDrive       - GP1 is used for drive train input
+        // doIntake      - GP2-Right Trigger and GP2-Left Trigger are used for intake input
+        // doDeposit     - GP2-Y and GP2-X are used for deposit input
+        // doDroneLaunch - must be in endgame (see droneTimer and endGame variables) and
+        //                 GP2-B and GP-Left Bumper are pushed together
+        // doLiftRobot   - GP2-Right Bumper is used for lift input
+
+        doDrive();            // Drive Train
+        doIntake();           // Intake
+        doDeposit();          // Deposit
+        doDroneLaunch();      // Launch the drone - only if in end game (last 30 seconds and GP2-B and GP-Left Bumper are pushed together)
+        doLiftRobot();        // Lift the robot
+
+        // End code added by Steeeve
     }
 
 
